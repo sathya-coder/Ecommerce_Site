@@ -255,7 +255,27 @@ class userapplycoupun(APIView):
 
         # return Response({'message': 'Coupun Applied'}, status=status.HTTP_200_OK)
     
-
+class usercoupundelete(APIView):
+    def post(self, request):  
+        serializer = CoupunSerializer(data=request.data)
+        if serializer.is_valid():
+            user_id = serializer.validated_data['user_id']
+            coupun_code = serializer.validated_data['coupun_code']
+            
+            # Assuming 'product_ids' is a list of product IDs
+            if Coupun.objects.filter(coupun_code=coupun_code).exists():
+                if UsedCoupuns.objects.filter(user_id=user_id, status='1').exists():
+                    coupon = UsedCoupuns.objects.filter(user_id=user_id, status='1').first()
+                    coupon.status = '0'
+                    coupon.save()
+                    return Response({'message': 'Coupon Cancelled. Try again later.'}, status=status.HTTP_200_OK)
+                else:
+                    return Response({'message': 'User has not used this coupon.'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({'message': 'Invalid Coupon.'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
 class coupunlist(generics.ListCreateAPIView):
     queryset = UsedCoupuns.objects.all()
     serializer_class = UsedCoupunsSerializer

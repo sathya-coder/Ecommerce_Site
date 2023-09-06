@@ -23,5 +23,6 @@ urlpatterns = [
     path('api/password-reset/', PasswordResetView.as_view(), name='password-reset'),
     path('api/coupun-generation/', coupungeneration.as_view(), name='coupun-generation'),
     path('api/user-apply-coupun/', userapplycoupun.as_view(), name='user-apply-coupun'),
+    path('api/user-coupun-delete/', usercoupundelete.as_view(), name='user-coupun-delete'),
     path('api/coupun-list/', coupunlist.as_view(), name='coupun-list'),
 ]
