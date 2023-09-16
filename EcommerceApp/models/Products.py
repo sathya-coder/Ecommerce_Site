@@ -30,8 +30,6 @@ class Cart(models.Model):
     products = models.ManyToManyField(Product)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"Cart for {self.user.full_name}"
 
 
 
